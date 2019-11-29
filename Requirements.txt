@@ -1,0 +1,27 @@
+============Requirements==============
+1. Python
+2. IDE - Anaconda Navigator (Optional)
+3. Jupyter Notebook (Optional)
+4. Basic Python Terminal also works
+5. Flask for API Creation
+
+========Execution Steps=================
+Option - 1: 
+1. Run app.py saved as (.ipynb extension) over Anaconda Navigator IDE in Jupyter Notebook. 
+2. Then you can opt. as one of the Player (i.e. either as Player X or Player O). 
+3. Game will begin with computer i.e. AI player as second player.
+4. You need to I/P numbers between 1-9 as place you want to occupy over the Tic-Tac-Toe board
+5. For every move you make computer would make a corresponding move and in end based on logic it would be decided whether game was a.) Won by Player (you)
+				 b.) Won by computer
+				 c.) Or it was a Tie
+
+Option - 2: 
+1. Run app.py code over Python terminal (with python and Flask installed in system) using command - "python app.py"
+2. Play the game with same rules as described above only thing to remember is every user input over terminal should be passed as string i.e. in quotes.
+3. Also you can make your app up locally in browser using 127.0.0.1:5000/ or localhost:5000/ and hit ENTER.
+4. You can navigate to following routes/URLs: 
+   HomePage - localhost:5000
+   All Games stored over server in JSON Format - localhost:5000/api/v1/resources/ticTacToeGames/all
+   Game Id based search - localhost:5000/api/v1/resources/ticTacToeGames/gameID=<int_value>
+
+Note: Code and RestAPI execution Snaps has also been added to git repo. for reference.

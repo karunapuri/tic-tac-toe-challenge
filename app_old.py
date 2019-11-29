@@ -1,22 +1,9 @@
-# -*- coding: utf-8 -*-
-import json
+# Tic Tac Toe with AI or computer Player
 import random
-import flask
-from flask import request, jsonify
-
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
-
-saveGameAsJson = [
-{"gameID": 184, "Computer": "Won Game", "computerLetter": "X"},
-{"gameID": 557, "Computer": "Won Game", "computerLetter": "O"},
-{"gameID": 860, "Computer": "Won Game", "computerLetter": "O"},
-{"gameID": 711, "Computer": "Won Game", "computerLetter": "O"},
-{"gameID": 44, "Computer": "Won Game", "computerLetter": "O"},
-{"gameID": 556, "Computer": "Won Game", "computerLetter": "O"}
-]
-
 def drawBoard(board):
+
+     # This function prints out the board that it was passed.
+
     print('   |   |')
     print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
     print('   |   |')
@@ -30,12 +17,14 @@ def drawBoard(board):
     print('   |   |')
 
 def inputPlayerLetter():
+
      # Returns a list with the player’s letter as the first item, and the computer's letter as the second.
     letter = ''
 
     while not (letter == 'X' or letter == 'O'):
         print('Do you want to be X or O?')
         letter = input().upper()
+
      # the first element in the list is the player’s letter, the second is the computer's letter.
 
     if letter == 'X':
@@ -45,16 +34,21 @@ def inputPlayerLetter():
         return ['O', 'X']
 
 def whoGoesFirst():
+
      # Randomly choose the player who goes first.
     if random.randint(0, 1) == 0:
         return 'computer'
+
     else:
         return 'player'
+
 
 def playAgain():
      # This function returns True if the player wants to play again, otherwise it returns False.
     print('Do you want to play again? (yes or no)')
     return input().lower().startswith('y')
+
+
 
 def makeMove(board, letter, move):
      board[move] = letter
@@ -62,6 +56,7 @@ def makeMove(board, letter, move):
 def isWinner(bo, le):
      # Given a board and a player’s letter, this function returns True if that player has won.
      # bo = board and le = letter.
+
      return ((bo[7] == le and bo[8] == le and bo[9] == le) or # across the top
      (bo[4] == le and bo[5] == le and bo[6] == le) or # across the middle
      (bo[1] == le and bo[2] == le and bo[3] == le) or # across the bottom
@@ -74,12 +69,14 @@ def isWinner(bo, le):
 def getBoardCopy(board):
      # Make a duplicate of the board list and return it the duplicate.
     dupeBoard = []
+
     for i in board:
         dupeBoard.append(i)
     return dupeBoard
 
 
 def isSpaceFree(board, move):
+
      # Return true if the passed move is free on the passed board.
     return board[move] == ' '
 
@@ -144,32 +141,6 @@ def isBoardFull(board):
          if isSpaceFree(board, i):
             return False
     return True
-
-@app.route('/', methods=['GET'])
-def home():
-    return '''<h1>Let's play a Game</h1>
-<p>Tic Tac Toe...</p>'''
-
-@app.route('/api/v1/resources/ticTacToeGames/all', methods=['GET'])
-def api_all():
-    return jsonify(saveGameAsJson)
-
-@app.route('/api/v1/resources/ticTacToeGames', methods=['GET'])
-def api_id():
-    # Check if an ID was provided as part of the URL.
-    # If ID is provided, assign it to a variable.
-    # If no ID is provided, display an error in the browser.
-    if 'gameID' in request.args:
-        gameID = int(request.args['gameID'])
-    else:
-        return "Error: No gameID field provided. Please specify an id."
-    results = []
-    for game in saveGameAsJson:
-        if game[0] == gameID:
-            results.append(game)
-    return jsonify(results)
-
-
 print('Welcome to Tic Tac Toe Game!')
 while True:
      # Reset the board
@@ -186,18 +157,12 @@ while True:
             makeMove(theBoard, playerLetter, move)
             if isWinner(theBoard, playerLetter):
                 drawBoard(theBoard)
-                playerJs = {"Player":"Won Game", "playerLetter":playerLetter, "gameID":random.randint(0, 999)}
                 print('Hooray! You have won the game!')
-                saveGameAsJson = json.dumps(playerJs, indent=4, sort_keys=True)
-                print(saveGameAsJson)
                 gameIsPlaying = False
             else:
                 if isBoardFull(theBoard):
                       drawBoard(theBoard)
-                      tieJs = {"Tie":"Nobody Won the Game", "gameID":random.randint(0, 999)}
                       print('The game is a tie!')
-                      saveGameAsJson = json.dumps(tieJs)
-                      print(saveGameAsJson)
                       break
                 else:
                      turn = 'computer'
@@ -207,26 +172,16 @@ while True:
             makeMove(theBoard, computerLetter, move)
             if isWinner(theBoard, computerLetter):
                 drawBoard(theBoard)
-                compJs = {"Computer":"Won Game", "computerLetter":computerLetter, "gameID":random.randint(0, 999)}
                 print('The computer has beaten you! You lose.')
-                saveGameAsJson = json.dumps(compJs)
-                print(saveGameAsJson)
                 gameIsPlaying = False
 
             else:
                  if isBoardFull(theBoard):
                     drawBoard(theBoard)
-                    tieJs = {"Tie":"Nobody Won the Game", "gameID":random.randint(0, 999)}
                     print('The game is a tie!')
-                    saveGameAsJson = json.dumps(tieJs)
-                    print(saveGameAsJson)
                     break
                  else:
                     turn = 'player'
 
     if not playAgain():
          break
-app.run()
-    
-    
-    
